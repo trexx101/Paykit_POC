@@ -18,13 +18,7 @@ const Drawer = (props) => (
         </Block>
       </TouchableWithoutFeedback>
       <Block row>
-        <Block middle style={styles.pro}>
-          <Text size={16} color="white">{props.profile.plan}</Text>
-        </Block>
         <Text size={16} muted style={styles.seller}>{props.profile.type}</Text>
-        <Text size={16} color={materialTheme.COLORS.WARNING}>
-          {props.profile.rating} <Icon name="shape-star" family="GalioExtra" size={14} />
-        </Text>
       </Block>
     </Block>
     <Block flex>
@@ -37,7 +31,7 @@ const Drawer = (props) => (
 
 const profile = {
   avatar: Images.Profile,
-  name: 'Rachel Brown',
+  name: 'Anthony Pua',
   type: 'Seller',
   plan: 'Pro',
   rating: 4.8
@@ -76,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: '#4B1958',
+    backgroundColor: '#7e6502',
     paddingHorizontal: 28,
     paddingBottom: theme.SIZES.BASE,
     paddingTop: theme.SIZES.BASE * 2,

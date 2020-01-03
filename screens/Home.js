@@ -1,72 +1,53 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
+import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
+import { Button, Block, Text, Input, theme, Card } from 'galio-framework';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Icon, Product, MenuFooter } from '../components/';
 
-import { Icon, Product } from '../components/';
-
-const { width } = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 import products from '../constants/products';
 
+import { Images, materialTheme } from '../constants';
+import { HeaderHeight } from "../constants/utils";
+const thumbMeasure = (width - 48 - 32) / 3;
+
+
 export default class Home extends React.Component {
-  renderSearch = () => {
-    const { navigation } = this.props;
-    const iconCamera = <Icon size={16} color={theme.COLORS.MUTED} name="zoom-in" family="material" />
 
-    return (
-      <Input
-        right
-        color="black"
-        style={styles.search}
-        iconContent={iconCamera}
-        placeholder="What are you looking for?"
-        onFocus={() => navigation.navigate('Pro')}
-      />
-    )
-  }
-  
-  renderTabs = () => {
-    const { navigation } = this.props;
-
-    return (
-      <Block row style={styles.tabs}>
-        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Pro')}>
-          <Block row middle>
-            <Icon name="grid" family="feather" style={{ paddingRight: 8 }} />
-            <Text size={16} style={styles.tabTitle}>Categories</Text>
-          </Block>
-        </Button>
-        <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Pro')}>
-          <Block row middle>
-            <Icon size={16} name="camera-18" family="GalioExtra" style={{ paddingRight: 8 }} />
-            <Text size={16} style={styles.tabTitle}>Best Deals</Text>
-          </Block>
-        </Button>
-      </Block>
-    )
-  }
-
-  renderProducts = () => {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.products}>
-        <Block flex>
-          <Product product={products[0]} horizontal />
-          <Block flex row>
-            <Product product={products[1]} style={{ marginRight: theme.SIZES.BASE }} />
-            <Product product={products[2]} />
-          </Block>
-          <Product product={products[3]} horizontal />
-          <Product product={products[4]} full />
-        </Block>
-      </ScrollView>
-    )
-  }
 
   render() {
+    const { navigation } = this.props;
     return (
-      <Block flex center style={styles.home}>
-        {this.renderProducts()}
+      <Block flex style={styles.profile}>
+        
+          <Block 
+            style={styles.profileContainer}>
+            <Block flex style={styles.profileDetails}>
+              <Block style={styles.profileTexts}>
+                <Text color="black" size={28} style={{ paddingBottom: 8, paddingTop: 5  }}>Hi Anthony</Text>
+                <Block row space="between">
+                  <Block row>
+                    <Button round size='small' color='#000000'>Log off</Button>
+                  </Block>
+                </Block>
+              </Block>
+            </Block>
+            </Block>
+        
+        <Block flex style={styles.newsBanner}>
+        <ScrollView showsVerticalScrollIndicator={true}>
+          <Card borderless style={styles.newsCard}>
+            <Text h4>We will keep updating the app using your feedback</Text> 
+            <Text color="black" p muted>Help us improve by answering some quick questions</Text>
+          </Card>
+          <Card borderless style={styles.newsCard}>
+             <Text h4>On average people get $751 worth of rebates and cash back </Text> 
+          
+          </Card>
+          </ScrollView>
+        </Block>
+        
+        <MenuFooter navigation={navigation}/>
       </Block>
     );
   }
@@ -75,13 +56,6 @@ export default class Home extends React.Component {
 const styles = StyleSheet.create({
   home: {
     width: width,    
-  },
-  search: {
-    height: 48,
-    width: width - 32,
-    marginHorizontal: 16,
-    borderWidth: 1,
-    borderRadius: 3,
   },
   header: {
     backgroundColor: theme.COLORS.WHITE,
@@ -95,29 +69,44 @@ const styles = StyleSheet.create({
     elevation: 4,
     zIndex: 2,
   },
-  tabs: {
-    marginBottom: 24,
-    marginTop: 10,
-    elevation: 4,
+  profile: {
+    marginTop: Platform.OS === 'android' ? -HeaderHeight : 0,
+
   },
-  tab: {
-    backgroundColor: theme.COLORS.TRANSPARENT,
-    width: width * 0.50,
-    borderRadius: 0,
-    borderWidth: 0,
-    height: 24,
-    elevation: 0,
+  profileContainer: {
+    width: width,
+    height: '25%',
   },
-  tabTitle: {
-    lineHeight: 19,
-    fontWeight: '300'
+  newsBanner: {
+  
   },
-  divider: {
-    borderRightWidth: 0.3,
-    borderRightColor: theme.COLORS.MUTED,
+  newsCard: {
+    backgroundColor: theme.COLORS.WHITE,
+    margin:5,
+    padding:12,
   },
-  products: {
-    width: width - theme.SIZES.BASE * 2,
+  profileDetails: {
+    paddingTop: theme.SIZES.BASE * 2,
+    justifyContent: 'flex-end',
+    
+  },
+  profileTexts: {
+    paddingHorizontal: theme.SIZES.BASE * 2,
     paddingVertical: theme.SIZES.BASE * 2,
+    zIndex: 2
   },
+  options: {
+    position: 'relative',
+    padding: theme.SIZES.BASE,
+    marginHorizontal: theme.SIZES.BASE,
+    marginTop: -theme.SIZES.BASE * 7,
+    borderTopLeftRadius: 13,
+    borderTopRightRadius: 13,
+    backgroundColor: theme.COLORS.WHITE,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 8,
+    shadowOpacity: 0.2,
+    zIndex: 2,
+  }
 });

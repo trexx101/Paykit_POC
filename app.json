@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "rn-material-kit-free",
-    "description": "React Native - Material Kit Free",
-    "slug": "rn-material-kit-free",
+    "name": "swift-npp-paykit-app",
+    "description": "React native app to demo NPP realtime payments",
+    "slug": "swift-npp-paykit-app",
     "privacy": "unlisted",
     "sdkVersion": "35.0.0",
     "platforms": [

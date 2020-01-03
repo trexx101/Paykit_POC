@@ -6,6 +6,8 @@ const Products = {
 
 const Profile = 'https://images.unsplash.com/photo-1512529920731-e8abaea917a5?fit=crop&w=840&q=80';
 const Avatar = 'https://images.unsplash.com/photo-1518725522904-4b3939358342?fit=crop&w=210&q=80';
+const Payid = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.cua.com.au%2Faboutus%2Fcua-news%2Fblog-items%2Fcustomer-news%2F2018%2Fjanuary&psig=AOvVaw1BlwnRUMNc0c0lTBXcDkoY&ust=1577862561240000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJjMuaGq3-YCFQAAAAAdAAAAABAD';
+
 
 const Viewed = [
   'https://images.unsplash.com/photo-1508264443919-15a31e1d9c1a?fit=crop&w=240&q=80',
@@ -16,6 +18,7 @@ const Viewed = [
   'https://images.unsplash.com/photo-1542068829-1115f7259450?fit=crop&w=240&q=80',
 ];
 
+
 export default {
   Onboarding,
   Pro,
@@ -23,4 +26,5 @@ export default {
   Profile,
   Viewed,
   Avatar,
+  Payid,
 }

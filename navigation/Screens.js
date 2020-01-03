@@ -9,7 +9,9 @@ import HomeScreen from '../screens/Home';
 import OnboardingScreen from '../screens/Onboarding';
 import ProfileScreen from '../screens/Profile';
 import ProScreen from '../screens/Pro';
+import PayScreen from '../screens/Pay';
 import SettingsScreen from '../screens/Settings';
+import TransferScreen from '../screens/MobilePayment';
 
 import Menu from './Menu';
 import Header from '../components/Header';
@@ -63,6 +65,7 @@ const ProfileStack = createStackNavigator({
   transitionConfig,
 });
 
+
 const SettingsStack = createStackNavigator({
   Settings: {
     screen: SettingsScreen,
@@ -93,13 +96,28 @@ const HomeStack = createStackNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: ({navigation}) => ({
-      header: <Header search tabs title="Home" navigation={navigation} />,
+      //header: <Header search tabs title="Home" navigation={navigation} />,
+      header: <Header transparent title="     " navigation={navigation} />,
     })
   },
   Pro: {
     screen: ProScreen,
     navigationOptions: ({navigation}) => ({
       header: <Header back white transparent title="" navigation={navigation} />,
+      headerTransparent: true,
+    })
+  },
+  Pay: {
+    screen: PayScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title="Pay Someone" navigation={navigation} />,
+      headerTransparent: true,
+    })
+  },
+  Transfer: {
+    screen: TransferScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title="Mobile Payment" navigation={navigation} />,
       headerTransparent: true,
     })
   },
@@ -127,37 +145,19 @@ const AppStack = createDrawerNavigator(
         )
       }
     },
-    Woman: {
-      screen: ProScreen,
-      navigationOptions: (navOpt) => ({
+    Pay: {
+      screen: PayScreen,
+      navigationOptions: {
         drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Woman" />
+          <Drawer focused={focused} screen="Pay" title="Make Payment" />
         ),
-      }),
+      }
     },
-    Man: {
-      screen: ProScreen,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Man" />
-        ),
-      }),
-    },
-    Kids: {
-      screen: ProScreen,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Kids" />
-        ),
-      }),
-    },
-    NewCollection: {
-      screen: ProScreen,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="New Collection" />
-        ),
-      }),
+    Transfer: {
+      screen: TransferScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
     },
     Profile: {
       screen: ProfileStack,
@@ -177,11 +177,9 @@ const AppStack = createDrawerNavigator(
     },
     Components: {
       screen: ComponentsStack,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Components" title="Components" />
-        ),
-      }),
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
     },
     MenuDivider: {
       screen: HomeStack,
@@ -189,22 +187,7 @@ const AppStack = createDrawerNavigator(
         drawerLabel: () => <Block style={{marginVertical: 8}}><Text>{` `}</Text></Block>,
       },
     },
-    SignIn: {
-      screen: ProScreen,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Sign In" />
-        ),
-      }),
-    },
-    SignUp: {
-      screen: ProScreen,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Sign Up" />
-        ),
-      }),
-    },
+    
   },
   Menu
 );

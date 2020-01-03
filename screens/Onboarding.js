@@ -27,7 +27,7 @@ export default class Onboarding extends React.Component {
                 <Text color="white" size={60}>SWIFT</Text>
               </Block>
               <Block row>
-                <Text color="white" size={60}>Pay kit</Text>
+                <Text color="white" size={60}>NPP kit</Text>
               </Block>
               <Text size={16} color='rgba(255,255,255,0.6)'>
                 Real time payments to real people
@@ -37,7 +37,7 @@ export default class Onboarding extends React.Component {
               <Button
                 shadowless
                 style={styles.button}
-                color={materialTheme.COLORS.BUTTON_COLOR}
+                color="#FDD841"
                 onPress={() => navigation.navigate('Home')}>
                 Welcome
               </Button>
