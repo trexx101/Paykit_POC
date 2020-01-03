@@ -12,6 +12,7 @@ import ProScreen from '../screens/Pro';
 import PayScreen from '../screens/Pay';
 import SettingsScreen from '../screens/Settings';
 import TransferScreen from '../screens/MobilePayment';
+import NotificationScreen from '../screens/PaymentNotification';
 
 import Menu from './Menu';
 import Header from '../components/Header';
@@ -121,6 +122,13 @@ const HomeStack = createStackNavigator({
       headerTransparent: true,
     })
   },
+  Notification: {
+    screen: NotificationScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title="Payment Status" navigation={navigation} />,
+      headerTransparent: true,
+    })
+  },
 },
 {
   cardStyle: { 
@@ -155,6 +163,12 @@ const AppStack = createDrawerNavigator(
     },
     Transfer: {
       screen: TransferScreen,
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
+    },
+    Notification: {
+      screen: NotificationScreen,
       navigationOptions: {
         drawerLabel: () => {}
       }
