@@ -175,11 +175,9 @@ const AppStack = createDrawerNavigator(
     },
     Profile: {
       screen: ProfileStack,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Profile" title="Profile" />
-        ),
-      }),
+      navigationOptions: {
+        drawerLabel: () => {}
+      }
     },
     Settings: {
       screen: SettingsStack,

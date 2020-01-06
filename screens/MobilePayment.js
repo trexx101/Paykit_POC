@@ -1,6 +1,8 @@
 import React from 'react';
-import { Modal, StyleSheet, ActivityIndicator, Dimensions, FlatList, View , TouchableOpacity, TouchableHighlight, Alert, Image} from 'react-native';
+import { Modal, StyleSheet, ActivityIndicator, Dimensions, FlatList, View , TouchableOpacity, ScrollView, Alert, Image} from 'react-native';
 import { Block, Text, theme, Input, Button } from 'galio-framework';
+import qs from 'qs';
+import axios from 'axios';
 import { Icon, boApp } from '../components/';
 
 const { height, width } = Dimensions.get('screen');
@@ -15,69 +17,67 @@ constructor (){
 super()
 this.state={
     isLoading: false,
-    contact: "",
-   
+    amount:"",
+    desc:"",
+    modalVisible: false,
 };
+
+this.handleAmountChange = this.handleAmountChange.bind(this);
+this.handleSubmit = this.handleSubmit.bind(this);
 }
 
-startPayment = async () => {
-    const response = await boApp.post('/credittransfer', {
-        params: {
-            name: 'James Smith',
-            amount: 1200.10
-        }
-    }).catch(function (error) {
+handleAmountChange(amount) {
+    this.setState({ amount });
+  }
+
+  async handleSubmit() {
+    const url = 'http://192.168.43.29:8080/aunpp/boapp/credittransfer';
+    const data = { 'name': 'James Smith', 'amount': this.state.amount };
+    const options = {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    data: qs.stringify(data),
+    url
+    };
+    const response = await axios(options).
+    then(response => {
+        console.log("reply = "+response.data+" Code: "+response.status);
+        responsecode = response.status;
+        responseAlias = response.data;
+        //if (response.code == '200'){
+            console.log("Successful transfer");
+            let payment = {
+                amount: this.state.amount,
+                name: "James Smith",
+                
+               };
+            this.props.navigation.navigate('Notification', { payment });
+		//}
+
+      }).catch(error => {
         if (error.response) {
+
           // The request was made, but the server responded with a status code
           // that falls out of the range of 2xx
-          console.log(error.response.data);
           console.log(error.response.status);
-          console.log(error.response.headers);
+          console.log("reason = "+error.response.data+" Code: "+error.response.status);
+          this.setState({
+            modalVisible: true
+        });
         } else {
           // Something happened in setting up the request that triggered an Error
           console.log('Error', error.message);
         }
         console.log(error.config);
     });
-    
+
 }
 
-payContact = (item) => {
-    
-    if(item.phoneNumbers !== undefined ) {
-        let fullName = (item.firstName+ " "+item.lastName).toUpperCase();
-        console.log("Selected contact "+fullName)
-        
-    
-        if (item.phoneNumbers[0].number.toString().endsWith(5)){
-            console.log("contact doesnt not have PayID")
-            this.setState({
-                modalVisible: true,
-                activeNumber: item.phoneNumbers[0].number,
-                activeName: fullName,
-                payIDactive: false
-            });
-        }
-        else {
-            //set payid to active
-            this.setState({
-                modalVisible: true,
-                activeNumber: item.phoneNumbers[0].number,
-                activeName: fullName,
-                payIDactive: true
-            });
-            console.log("phone number=> "+item.phoneNumbers[0].number)
-        }
-    }
-    else {
-        console.log("Bad contact list, pls clean your phone")
-        console.log(item);
-    }
+setModalVisible(visible) {
+    this.setState({modalVisible: visible});
 }
 
 componentDidMount(){
-    //console.log("NAVIGATOR: ", this.props.navigation)
-    
 
 }
 
@@ -106,22 +106,46 @@ componentDidMount(){
                         <Input
                         label="Amount"
                         type="number-pad"
-                        placeholder="amount"/>
+                        placeholder="amount"
+                        value={this.state.amount}
+                        onChangeText={this.handleAmountChange}
+                        color="#FDD841"/>
                     </Block>
                     <Block>
                         <Input
                         label="Description"
                         type="default"
-                        placeholder="description"/>
+                        placeholder="description"
+                        value={this.state.name}
+                        color="#FDD841"/>
                     </Block>
                     <Button
                     shadowless
                     style={styles.button}
-                    onPress={() => this.startPayment()}
+                    onPress={this.handleSubmit}
                     color='#FDD841'>
                         Pay
                     </Button>
                 </Block> 
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => { this.setModalVisible(false); } }>
+                        <ScrollView>
+                        <View style={styles.modalWindow}>
+                            <Text style={{ fontWeight: "bold", fontSize: 24}}>Trx failed, invalid amount</Text>
+                            <Text>...</Text>
+
+                            <Button
+                            style={styles.button}
+                            color='transparent'
+                            onPress={() => this.setModalVisible(!this.state.modalVisible)}>
+                            Cancel
+                            </Button>
+                        </View>
+                        </ScrollView>
+                    </Modal>
             </View>
         );
     }
@@ -145,12 +169,25 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 60,
-    width: 120,
+    width: 140,
     marginBottom: theme.SIZES.BASE,
     alignSelf: "center",
   },
   button: {
       alignSelf:"center",
-  }
+  },
+  button: {
+    alignSelf:"center",
+    marginBottom:5
+},
+modalWindow: {
+  marginTop: 200,
+  height: '43%',
+  width: '96%',  
+  backgroundColor:'#808080', 
+  alignSelf:'center',
+  borderRadius:5,
+  marginHorizontal: 5,
+}
   
 });

@@ -11,6 +11,7 @@ import * as Expo from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Contacts from 'expo-contacts';
 import axios from 'axios';
+import qs from 'qs'
   
 
 export default class Pay extends React.Component {
@@ -58,36 +59,47 @@ searchContacts = (value) => {
     this.setState({contacts: filteredContacts});
 }
 
+
 payIDModal = async (item) => {
-    
+    let responsecode = "";
+     
     if(item.phoneNumbers !== undefined ) {
         let fullName = (item.firstName + " " + item.lastName).toUpperCase();
+        let phoneNumber = item.phoneNumbers[0].number;
         console.log("Selected contact "+fullName);
+        if (fullName=="JAMES SMITH"){
+            phoneNumber = "00612 5550 4516";
+        }
         
         console.log("perform alias lookup");
-        const response = await boApp.post('/aliasresolution', {
-            type: 'TELI',
-            value: '00612 5550 4516'
-          })
-          .then(function (response) {
-            console.log(response);
+        const url = 'http://192.168.43.29:8080/aunpp/boapp/aliasresolution';
+        const data = { 'type': 'TELI', 'value': phoneNumber };
+        const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        data: qs.stringify(data),
+        url
+        };
+        const response = await axios(options).then(function (response) {
+            console.log("Alias = "+response.data+" Code: "+response.status);
+            responsecode = response.status;
+            responseAlias = response.data;
+
           }).catch(function (error) {
             if (error.response) {
               // The request was made, but the server responded with a status code
               // that falls out of the range of 2xx
-              console.log(error.response.data);
               console.log(error.response.status);
-              console.log(error.response.headers);
             } else {
               // Something happened in setting up the request that triggered an Error
               console.log('Error', error.message);
             }
             console.log(error.config);
         });
-          
+
         
     
-        if (item.phoneNumbers[0].number.toString().endsWith(5)){
+        if (responsecode !== 200 ){
             console.log("contact doesnt not have PayID")
             this.setState({
                 modalVisible: true,
@@ -100,7 +112,7 @@ payIDModal = async (item) => {
             //set payid to active
             let payData = {
                 "name": fullName,
-                "payID": "PAYER01",
+                "payID": responseAlias,
                 "phoneNumber": item.phoneNumbers[0].number
             };
             this.setState({
@@ -129,7 +141,7 @@ toggleModalAndHop(screenName) {
         name: this.state.paymentData.name,
         payid: this.state.paymentData.payID,
         number: this.state.paymentData.phoneNumber,
-        age: 12
+        
        };
     this.setState({modalVisible: !this.state.modalVisible });
     console.log("name:: "+this.state.paymentData.name+" payid:: "+this.state.paymentData.payID+" number:: "+this.state.paymentData.phoneNumber)

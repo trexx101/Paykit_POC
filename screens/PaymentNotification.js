@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, StyleSheet, ActivityIndicator, Dimensions, FlatList, View , TouchableOpacity, TouchableHighlight, Alert, Image} from 'react-native';
+import { Modal, StyleSheet, Dimensions, FlatList, View , TouchableOpacity, TouchableHighlight, Alert, Image} from 'react-native';
 import { Block, Text, theme, Input, Button, Accordion } from 'galio-framework';
 import { Icon } from '../components/';
 
@@ -31,33 +31,18 @@ componentDidMount(){
 
     render(){
         const { navigation } = this.props;
-        const conName = this.props.navigation.state.params.payment.name;
-        const payid = this.props.navigation.state.params.payment.payid;
-        const phone = this.props.navigation.state.params.payment.number;
 
-        
-
-        const data = [
-            { title: "First Chapter", content: "Lorem ipsum dolor sit amet", 
-              icon: {
-                name: 'keyboard-arrow-up',
-                family: 'material',
-                size: 16,
-              } 
-           },
-            { title: "2nd Chapter", content: "Lorem ipsum dolor sit amet" },
-            { title: "3rd Chapter", content: "Lorem ipsum dolor sit amet" }
-          ];
 
         console.log("start payment to: "+this.props.navigation.state.params.payment.name);
         return (
             <View style={[styles.container]}>
                 <Block style={[styles.mainForm]}>
-                    <Image source={require('../assets/icons/payid_sec.png')} style={styles.logo} />
+                <Image source={require('../assets/icons/thumb_Alias.gif')} style={styles.logo} />
+                    <Text style={{fontWeight:'bold', fontSize: 28}}> SUCCESS</Text>
 
-                    <Block style={{ height: 200 }}>
-                        <Accordion dataArray={data} />
-                    </Block>
+                    
+                        <Button onPress={() => this.props.navigation.navigate('Home')}>Home</Button>
+                    
                 </Block> 
             </View>
         );
@@ -73,8 +58,8 @@ const styles = StyleSheet.create({
   },
   mainForm:{
       flex:1,
-    
-    paddingVertical: theme.SIZES.BASE,
+      width: '95%',
+      paddingVertical: theme.SIZES.BASE,
   },
   contact_data: {
     alignItems:"center",
@@ -82,7 +67,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 60,
-    width: 120,
+    width: 140,
     marginBottom: theme.SIZES.BASE,
     alignSelf: "center",
   },
