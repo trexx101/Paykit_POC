@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, StyleSheet, ActivityIndicator, Dimensions, FlatList, View , TouchableOpacity, TouchableHighlight, Alert, Image} from 'react-native';
 import { Block, Text, theme, Input, Button } from 'galio-framework';
-import { Icon } from '../components/';
+import { Icon, boApp } from '../components/';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -10,6 +10,7 @@ import Images from '../constants/Images';
 import * as Expo from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Contacts from 'expo-contacts';
+import axios from 'axios';
   
 
 export default class Pay extends React.Component {
@@ -57,11 +58,33 @@ searchContacts = (value) => {
     this.setState({contacts: filteredContacts});
 }
 
-payIDModal = (item) => {
+payIDModal = async (item) => {
     
     if(item.phoneNumbers !== undefined ) {
         let fullName = (item.firstName + " " + item.lastName).toUpperCase();
-        console.log("Selected contact "+fullName)
+        console.log("Selected contact "+fullName);
+        
+        console.log("perform alias lookup");
+        const response = await boApp.post('/aliasresolution', {
+            type: 'TELI',
+            value: '00612 5550 4516'
+          })
+          .then(function (response) {
+            console.log(response);
+          }).catch(function (error) {
+            if (error.response) {
+              // The request was made, but the server responded with a status code
+              // that falls out of the range of 2xx
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log('Error', error.message);
+            }
+            console.log(error.config);
+        });
+          
         
     
         if (item.phoneNumbers[0].number.toString().endsWith(5)){
@@ -185,15 +208,14 @@ renderItem = ({item}) =>(
                     <View style={styles.modalWindow}>
                     {this.state.payIDactive ? (
                     <Block style={{flex:1}}>
-                            <Image source={require('../assets/icons/payid_sec.png')} style={styles.avatar} />
-                            <Text style={{padding:10, fontSize:24}}>{this.state.activeName} has Registered {this.state.activeNumber} as PayID</Text>
+                            <Image source={require('../assets/icons/thumb_Alias.gif')} style={styles.avatar} />
+                            <Text style={{padding:10, fontSize:24}}>{this.state.activeName} has Registered {this.state.activeNumber} as an Alias</Text>
                             <Button 
                             color='transparent'
                             onPress={() => this.toggleModalAndHop('Transfer')}
                             style={styles.button}
                             >Proceed</Button>
                             <Button
-                            shadowless
                             style={styles.button}
                             color='transparent'
                             onPress={() => this.setModalVisible(!this.state.modalVisible)}>
@@ -202,15 +224,16 @@ renderItem = ({item}) =>(
                     </Block>
                         ) : (
                             <Block style={{flex:1}}>
-                            <Image source={require('../assets/icons/payid_sec.png')} style={styles.avatar} />
-                            <Text style={{padding:10, fontSize:24}}>{this.state.activeName} has not been Registered {this.state.activeNumber} as PayID</Text>
+                            <Image source={require('../assets/icons/thumb_Alias.gif')} style={styles.avatar} />
+                            <Text style={{padding:10, fontSize:24}}>{this.state.activeName} has not been Registered {this.state.activeNumber} as an Alias</Text>
                             <Button 
-                            disabled 
+                            disabled
+                            shadowless
                             color='transparent' style={styles.button}
                             onPress={() => navigation.navigate('Transfer')}
                             >Proceed</Button>
                             <Button
-                            shadowless
+                            
                             style={styles.button}
                             color='transparent'
                             onPress={() => this.setModalVisible(!this.state.modalVisible)}>
@@ -240,7 +263,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     height: 60,
-    width: 120,
+    width: 140,
     marginBottom: theme.SIZES.BASE,
     alignSelf: "center",
     marginTop:5

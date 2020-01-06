@@ -35,6 +35,8 @@ componentDidMount(){
         const payid = this.props.navigation.state.params.payment.payid;
         const phone = this.props.navigation.state.params.payment.number;
 
+        
+
         const data = [
             { title: "First Chapter", content: "Lorem ipsum dolor sit amet", 
               icon: {
@@ -52,6 +54,7 @@ componentDidMount(){
             <View style={[styles.container]}>
                 <Block style={[styles.mainForm]}>
                     <Image source={require('../assets/icons/payid_sec.png')} style={styles.logo} />
+
                     <Block style={{ height: 200 }}>
                         <Accordion dataArray={data} />
                     </Block>

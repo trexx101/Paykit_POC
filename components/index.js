@@ -7,6 +7,7 @@ import MenuFooter from './MenuFooter';
 import Drawer from './Drawer';
 import Header from './Header';
 import Switch from './Switch';
+import boApp from './boApp';
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   Header,
   Switch,
   MenuFooter,
+  boApp,
 };

@@ -1,16 +1,12 @@
 import React from 'react';
 import { Modal, StyleSheet, ActivityIndicator, Dimensions, FlatList, View , TouchableOpacity, TouchableHighlight, Alert, Image} from 'react-native';
 import { Block, Text, theme, Input, Button } from 'galio-framework';
-import { Icon } from '../components/';
+import { Icon, boApp } from '../components/';
 
 const { height, width } = Dimensions.get('screen');
 
 import materialTheme from '../constants/Theme';
 import Images from '../constants/Images';
-import * as Expo from 'expo';
-import * as Permissions from 'expo-permissions';
-import * as Contacts from 'expo-contacts';
-
   
 
 export default class MobilePayments extends React.Component {
@@ -24,18 +20,26 @@ this.state={
 };
 }
 
-startPayment = () => {
-    /*
-    var cno = new mq.MQCNO();
-
-    // Add authentication via the MQCSP structure
-var csp = new mq.MQCSP();
-csp.UserId = "inahafen";
-csp.Password = "ffjhkucvqm_5_YgTpzCs8aDPl_JM0R54qzJuYNbLDrsk";
-// Make the MQCNO refer to the MQCSP
-// This line allows use of the userid/password
-cno.SecurityParms = csp;
-*/
+startPayment = async () => {
+    const response = await boApp.post('/credittransfer', {
+        params: {
+            name: 'James Smith',
+            amount: 1200.10
+        }
+    }).catch(function (error) {
+        if (error.response) {
+          // The request was made, but the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
+    });
+    
 }
 
 payContact = (item) => {
@@ -73,9 +77,8 @@ payContact = (item) => {
 
 componentDidMount(){
     //console.log("NAVIGATOR: ", this.props.navigation)
- 
- 
     
+
 }
 
 
@@ -85,11 +88,13 @@ componentDidMount(){
         const payid = this.props.navigation.state.params.payment.payid;
         const phone = this.props.navigation.state.params.payment.number;
 
+        
+
         console.log("start payment to: "+this.props.navigation.state.params.payment.name);
         return (
             <View style={[styles.container]}>
                 <Block style={[styles.mainForm]}>
-                    <Image source={require('../assets/icons/payid_sec.png')} style={styles.logo} />
+                    <Image source={require('../assets/icons/thumb_Alias.gif')} style={styles.logo} />
                     <Block style={styles.contact_data}>
                         <Text style={{ fontWeight: "bold", fontSize: 24}}>{conName}</Text>
                         <Text>({payid})</Text>
@@ -101,15 +106,13 @@ componentDidMount(){
                         <Input
                         label="Amount"
                         type="number-pad"
-                        placeholder="amount"
-                        placeholderTextColor={materialTheme.COLORS.DEFAULT}/>
+                        placeholder="amount"/>
                     </Block>
                     <Block>
                         <Input
                         label="Description"
                         type="default"
-                        placeholder="description"
-                        placeholderTextColor={materialTheme.COLORS.DEFAULT}/>
+                        placeholder="description"/>
                     </Block>
                     <Button
                     shadowless
